@@ -4,27 +4,28 @@ title: "Anatomia de uma solução: VRaptor – linkTo para jsp – parte 1"
 permalink: /2011/06/17/anatomia-de-uma-solucao-vraptor-linkto-para-jsp-parte-1
 tags: solucao, vraptor
 ---
+{% include header.html %}
 
 Uma das desvantagens de usar VRaptor é que sempre temos que digitar as URIs duas vezes – no controller e na view:
 
-```java
+{% highlight java %}
 @Resource
 public class ProdutoController {
     @Post("/produtos/{id}")
     public void visualiza(Long id) {...}
 }
-```
+{% endhighlight %}
 
-```xml
+{% highlight xml %}
 <a href="<c:url value="/produtos/${produto.id}"/>">${produto.nome}</a>
-```
+{% endhighlight %}
 
 Assim, durante o desenvolvimento você precisa lembrar qual é a URI correta do método, sem garantia nenhuma de que ela é a certa – se por algum motivo mudarmos o path do método visualiza todos os links para ele quebram silenciosamente.
 Para quem programa em Rails, existe uma solução para isso, um helper que gera os links dado um controller e um método:
 
-```erb
+{% highlight erb %}
 <% link_to "Um produto", :controller => "produtos", :action => "visualiza", :id => 4 %>
-```
+{% endhighlight %}
 
 Num projeto que eu estou desenvolvendo em VRaptor + Scala, com o Scalate como template engine, conseguimos chegar nisso:
 
