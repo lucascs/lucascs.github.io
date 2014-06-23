@@ -4351,10 +4351,12 @@ public class ProdutoController {
 </pre>
 <p>Como fazer para gerar as URIs /produtos/4, /produtos/15, etc ainda sem Tags ou ELResolvers?<br />
 Como fazer esse tipo de código funcionar?</p>
-<pre lang="html">
+
+{% highlight xml %}
 <c:forEach items="${produtos}" var="produto">
    <a href="${linkTo[ProdutoController].visualiza ??? produto.id ???}">Visualiza</a>
    <a href="${linkTo[ProdutoController].remove ??? produto ???}">Remove</a>
 </c:forEach>
-</pre>
+{% endhighlight %}
+
 <p>E agora, como vocês fariam isso? No próximo post eu explico o resto da solução, com um pouco mais de magia negra e detalhes internos do VRaptor que podem te ajudar a customizar várias coisas de forma bem fácil.</p>
