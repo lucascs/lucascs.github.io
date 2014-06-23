@@ -15,18 +15,18 @@ module Jekyll
       "#Jekyll:Post @id=#{self.id.inspect}"
     end
   end
-  
+
   class Page
     def inspect
       "#Jekyll:Page @name=#{self.name.inspect}"
     end
   end
-  
+
 end # Jekyll
-  
+
 module Jekyll
   module DebugFilter
-    
+
     def debug(obj, stdout=false)
       puts obj.pretty_inspect if stdout
       "<pre>#{obj.class}\n#{obj.pretty_inspect}</pre>"
@@ -35,4 +35,16 @@ module Jekyll
   end # DebugFilter
 end # Jekyll
 
+require 'digest'
+module Jekyll
+  module Md5Filter
+
+    def md5(obj)
+      Digest::MD5.hexdigest(obj) if obj
+    end
+
+  end # DebugFilter
+end # Jekyll
+
 Liquid::Template.register_filter(Jekyll::DebugFilter)
+Liquid::Template.register_filter(Jekyll::Md5Filter)
