@@ -12,6 +12,7 @@ author_login: lucascs
 author_email: lucas@cavalcanti.me
 wordpress_id: 9
 wordpress_url: http://blog.cavalcanti.me/?p=9
+permalink: 2011/06/17/anatomia-de-uma-solucao-vraptor-linkto-para-jsp-parte-1/
 date: '2011-06-17 11:05:56 -0300'
 date_gmt: '2011-06-17 14:05:56 -0300'
 categories:

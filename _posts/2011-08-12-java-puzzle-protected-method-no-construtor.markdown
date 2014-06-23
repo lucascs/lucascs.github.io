@@ -12,6 +12,7 @@ author_login: lucascs
 author_email: lucas@cavalcanti.me
 wordpress_id: 42
 wordpress_url: http://lucas.cavalcanti.me/?p=42
+permalink: 2011/08/12/java-puzzle-protected-method-no-construtor/
 date: '2011-08-12 18:45:37 -0300'
 date_gmt: '2011-08-12 21:45:37 -0300'
 categories:

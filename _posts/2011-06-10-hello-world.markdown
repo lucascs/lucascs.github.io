@@ -12,6 +12,7 @@ author_login: lucascs
 author_email: lucas@cavalcanti.me
 wordpress_id: 1
 wordpress_url: http://blog.cavalcanti.me/?p=1
+permalink: 2011/06/10/hello-world/
 date: '2011-06-10 03:20:22 -0300'
 date_gmt: '2011-06-10 03:20:22 -0300'
 categories:

@@ -12,6 +12,7 @@ author_login: lucascs
 author_email: lucas@cavalcanti.me
 wordpress_id: 60
 wordpress_url: http://lucas.cavalcanti.me/?p=60
+permalink: 2012/03/16/sobre-acoplamento-e-injecao-de-dependencias-em-ruby/
 date: '2012-03-16 11:30:14 -0300'
 date_gmt: '2012-03-16 14:30:14 -0300'
 categories:

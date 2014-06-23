@@ -12,6 +12,7 @@ author_login: lucascs
 author_email: lucas@cavalcanti.me
 wordpress_id: 47
 wordpress_url: http://lucas.cavalcanti.me/?p=47
+permalink: 2011/10/04/codigo-mais-funcional-com-scala-for-comprehensions/
 date: '2011-10-04 07:00:52 -0300'
 date_gmt: '2011-10-04 10:00:52 -0300'
 categories:
