@@ -92,62 +92,62 @@ comments:
     []'s
 ---
 <p>Antes de começar a solução, vamos usar uma rota mais fácil:</p>
-<pre lang="java">
+{% highlight java %}
 @Resource
 public class ProdutoController {
     @Post("/produtos")
     public void adiciona(Produto produto) {...}
 }
-</pre>
+{% endhighlight %}
 <p>A idéia é conseguir fazer com que:</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo[ProdutoController].adiciona}
-</pre>
+{% endhighlight %}
 <p>retorne a URI <b>/produtos</b>.</p>
 <p>Vamos, primeiro, olhar para a primeira parte e relaxar um pouquinho a sintaxe:</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo['ProdutoController']}
-</pre>
+{% endhighlight %}
 <p>Qual é a única forma disso funcionar?  Na EL padrão você geralmente só pode navegar pelos getters, com três exceções: Lists, Arrays e Maps. Nas Lists e Arrays você pode acessar os índices (lista[0], array[1], etc), e nos mapas você pode acessar as chaves (mapa['chave']). Então pro código acima funcionar, podemos fazer o linkTo ser um mapa e adicioná-lo no request:</p>
-<pre lang="java">
+{% highlight java %}
 Map<String, ?> linkTo = Maps.newHashMap(); // do guava, para evitar declarar os generics de novo
 linkTo.put("ProdutoController", objetoMagico);
 
 request.setAttribute("linkTo", linkTo);
-</pre>
+{% endhighlight %}
 <p>Agora só precisamos criar um <b>objetoMagico</b> em que eu possa chamar o <b>.adiciona</b>. Isso significa que precisamos de um objeto que tenha o método getAdiciona(). Até é possível gerar uma classe assim em tempo de compilação (com o APT) ou em runtime (com ASM ou javassist), uma classe para cada controller do sistema com getters para o nome de cada método. Mas isso é um pouco complicado demais (bem mais difícil que implementar a Tag ou o ELResolver que eu estava evitando), então vamos relaxar um pouco mais a sintaxe. Como fazer isso funcionar?</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo['ProdutoController']['adiciona']}
-</pre>
+{% endhighlight %}
 <p>Outro mapa!</p>
-<pre lang="java">
+{% highlight java %}
 Map<String, Map<String,String>> linkTo = Maps.newHashMap(); // viu como o guava é útil aqui? ;)
 
 linkTo.put("ProdutoController", ImmutableMap.of("adiciona", "/produtos"));
 
 request.setAttribute("linkTo", linkTo);
-</pre>
+{% endhighlight %}
 <p>Usei aqui a classe <a href="http://guava-libraries.googlecode.com/svn/tags/release09/javadoc/com/google/common/collect/ImmutableMap.html">ImmutableMap</a> do <a href="http://code.google.com/p/guava-libraries/">guava</a>, pro código ficar mais conciso. Isso cria um mapa imutável com uma única entrada (adiciona -> /produtos).</p>
 <p>Agora o código <b>${linkTo['ProdutoController']['adiciona']}</b> retorna o que a gente queria: <b>/produtos</b>.<br />
 O legal é que os colchetes são apenas <b>um</b> dos jeitos de acessar chaves de um mapa, não o único. No caso em que a chave é uma String, podemos simplificar a sintaxe:</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo['ProdutoController'].adiciona} => /produtos
-</pre>
+{% endhighlight %}
 <p>Já chegamos bem próximos da sintaxe proposta no começo do post, só falta retirar as aspas. Mas será que eu posso simplificar a sintaxe para ficar assim?</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo[ProdutoController].adiciona} => /produtos (?)
-</pre>
+{% endhighlight %}
 <p>Infelizmente não. Quando fazemos isso, o JSP procura por uma variável chamada ProdutoController. Bom, não seja por isso, basta fazer uma pequena <del datetime="2011-06-20T03:10:45+00:00">gambiarra</del> adaptação:</p>
-<pre lang="java">
+{% highlight java %}
 request.setAttribute("ProdutoController", "ProdutoController");
-</pre>
+{% endhighlight %}
 <p>E pronto, o código que queríamos funciona!</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo[ProdutoController].adiciona} => /produtos !
-</pre>
+{% endhighlight %}
 <p>Agora é só gerar esses mapas automaticamente, um para cada controller do VRaptor. Mas antes de fazer isso, existe um problema: a solução até aqui não suporta todas as rotas possíveis no VRaptor.</p>
 <p>E se tivéssemos:</p>
-<pre lang="java">
+{% highlight java %}
 @Resource
 public class ProdutoController {
     @Get("/produtos/{id}")
@@ -156,7 +156,7 @@ public class ProdutoController {
     @Delete("/produtos/{produto.id}")
     public void remove(Produto produto) {...}
 }
-</pre>
+{% endhighlight %}
 <p>Como fazer para gerar as URIs /produtos/4, /produtos/15, etc ainda sem Tags ou ELResolvers?<br />
 Como fazer esse tipo de código funcionar?</p>
 

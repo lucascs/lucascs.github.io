@@ -45,7 +45,8 @@ comments:
 ---
 <p>Enquanto estava <a href="https://github.com/caelum/vraptor/commit/58535af3c904aa2819fcc827eb8bb4aed5cf0405">refatorando</a> um <a href="https://github.com/caelum/vraptor/pull/377">pull request do VRaptor</a> feito pelo <a href="https://github.com/acdesouza">acdesouza</a>, cai numa situação estranha do java.</p>
 <p>A idéia era criar um ponto de extensão para a classe <a href="https://github.com/caelum/vraptor/blob/master/vraptor-core/src/main/java/br/com/caelum/vraptor/serialization/DefaultRepresentationResult.java">DefaultRepresentationResult</a>:</p>
-<pre lang="java">
+
+{% highlight java %}
 public DefaultRepresentationResult(...List<Serialization> serializations) {//construtor
     //...
     this.serializations = serializations;
@@ -59,10 +60,12 @@ public DefaultRepresentationResult(...List<Serialization> serializations) {//con
 protected void sortSerializations() {
        Collections.sort(this.serializations, new PackageComparator());
 }
-</pre>
+{% endhighlight %}
+
 <p>Daí se a pessoa quiser mudar a ordenação é só sobrescrever o método sortSerializations(). Até aí tudo bem, mas quão perigoso é isso?</p>
 <p>Daí vem o seguinte puzzle:</p>
-<pre lang="java">
+
+{% highlight java %}
 public class Mae {
     public Mae() {
          metodo();
@@ -71,8 +74,8 @@ public class Mae {
         System.out.println("Mãe");
     }
 }
-</pre>
-<pre lang="java">
+{% endhighlight %}
+{% highlight java %}
 public class Filha extends Mae {
    private final String x;
    public Filha() {
@@ -83,9 +86,9 @@ public class Filha extends Mae {
        System.out.println(x);
    }
 }
-</pre>
+{% endhighlight %}
 <p>Se eu executar:</p>
-<pre lang="java">
+{% highlight java %}
 new Filha();
-</pre>
+{% endhighlight %}
 <p>o que será impresso?</p>

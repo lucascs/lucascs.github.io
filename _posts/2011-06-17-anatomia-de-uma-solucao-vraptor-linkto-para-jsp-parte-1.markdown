@@ -115,32 +115,32 @@ comments:
     meu reader.\r\n\r\nAbraço."
 ---
 <p>Uma das desvantagens de usar VRaptor é que sempre temos que digitar as URIs duas vezes - no controller e na view:</p>
-<pre lang="java">
+{% highlight java %}
 @Resource
 public class ProdutoController {
     @Post("/produtos/{id}")
     public void visualiza(Long id) {...}
 }
-</pre>
-<pre lang="HTML">
+{% endhighlight %}
+{% highlight html %}
 <a href="<c:url value="/produtos/${produto.id}"/>">${produto.nome}</a>
-</pre>
+{% endhighlight %}
 <p>Assim, durante o desenvolvimento você precisa lembrar qual é a URI correta do método, sem garantia nenhuma de que ela é a certa - se por algum motivo mudarmos o path do método visualiza todos os links para ele quebram silenciosamente.</p>
 <p>Para quem programa em Rails, existe uma solução para isso, um helper que gera os links dado um controller e um método:</p>
-<pre lang="ruby">
+{% highlight erb %}
 <% link_to "Um produto", :controller => "produtos", :action => "visualiza", :id => 4 %>
-</pre>
+{% endhighlight %}
 <p>Num projeto que eu estou desenvolvendo em VRaptor + Scala, com o <a href="http://scalate.fusesource.org/">Scalate</a> como template engine, conseguimos chegar nisso:</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo[ProdutoController](_.visualiza(3))}  => /produtos/3
-</pre>
+{% endhighlight %}
 <p>E ainda ganhando checagem estática: o template não vai compilar se não existir o método visualiza em ProdutoController, que recebe um número como parâmetro. Isso é possível porque no ssp conseguimos executar qualquer método scala, com a sintaxe padrão do scala.</p>
 <p>Mas será que algo parecido com isso é possível com JSP?</p>
 <p>O primeiro problema é que usando a EL padrão do JSP você não pode executar qualquer método de um objeto, somente getters. Executar métodos só criando uma Tag, ou sobrescrevendo o ELResolver - ambas soluções bastante trabalhosas.</p>
 <p>Semana passada eu estava pareando com o Otávio Garcia, que é um grande contribuidor do VRaptor e estava visitando a Caelum, e a gente resolveu tentar encontrar uma solução para isso.</p>
 <p>Chegamos nessa solução, sem criar tags nem sobrescrever o <em>resolver</em>:</p>
-<pre lang="html">
+{% highlight html %}
 ${linkTo[ProdutoController].visualiza[3]}
-</pre>
+{% endhighlight %}
 <p>Será que isso funciona? Será que é possível fazer isso retornar a URI "/produtos/3"?</p>
 <p>Tem idéia de como fazer isso funcionar? Como seria? No próximo post eu explico qual foi a nossa solução, com pitadas de magia negra e técnicas interessantes. ;)</p>

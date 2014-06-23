@@ -150,16 +150,19 @@ comments:
 ---
 <p>Quem me conhece sabe que eu gosto bastante de linguagens com tipagem estática, mas vou parar um pouco para falar sobre acoplamento em linguagens com tipagem dinâmica e como isso é diferente do que eu estou acostumado a fazer normalmente.</p>
 <p>Vou começar por uma execução de um método qualquer em ruby:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 class MinhaClasse
   def faz_alguma_coisa(outro_cara)
     outro_cara.algum_metodo
   end
 end
-</pre>
+{% endhighlight %}
+
 <p>Qual é o nível de acoplamento da <code>MinhaClasse</code> com o <code>outro_cara</code>? O mais baixo possível! Só existe o acoplamento com a interface, no sentido mais puro da palavra, ou seja, só precisamos que o <code>outro_cara</code> tenha um método chamado <code>algum_metodo</code>, que não recebe nenhum argumento. Ou seja, o baixo acoplamento vem de graça! Não existe o acoplamento de tipos, que existe nas linguagens estáticas.</p>
 <p>Se existirem duas classes que tem esse método, qualquer uma delas pode ser usada:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 class CaraLegal
   def algum_metodo
     puts "yey!"
@@ -175,9 +178,11 @@ class CaraChato
     puts "Zzzzz"
   end
 end
-</pre>
+{% endhighlight %}
+
 <p>Agora se mudar um pouco a <code>MinhaClasse</code>, por exemplo:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 class MinhaClasse
   def faz_alguma_coisa(outro_cara)
     outro_cara.algum_metodo
@@ -185,10 +190,12 @@ class MinhaClasse
     outro_cara.outro_metodo
   end
 end
-</pre>
+{% endhighlight %}
+
 <p>Quebra todos os lugares que usam o <code>CaraChato</code> ou qualquer outra classe do sistema como argumento nesse método (inclusive os mocks que não esperavam a mensagem <code>:&zwj;outro_method</code> ¬¬). Quanto mais métodos eu chamar no <code>outro_cara</code>, mais eu estou me acoplando à interface dele, e maior é a chance de quebrar algum código que usa a <code>MinhaClasse</code>. Ou seja, ao mesmo tempo em que eu estou me acoplando pouco a um objeto, estou me acoplando a todas as classes que possuem os métodos que chamei em <code>faz_alguma_coisa</code>.</p>
 <p>Agora, suponha que a <code>MinhaClasse</code> precisa enviar um email, e eu resolvi implementar da seguinte maneira:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 class MinhaClasse
   #...
   def processo_complicado
@@ -197,16 +204,21 @@ class MinhaClasse
      enviador.envia email
   end
 end
-</pre>
+{% endhighlight %}
+
 <p>Agora além de estar se acoplando a uma interface, estaria também se acoplando a uma implementação! A vida me ensinou que nesse caso, para remover esse acoplamento posso usar injeção de dependências e receber esse enviador no construtor da <code>MinhaClasse</code>, por exemplo. Mas peraí, isso é Ruby, será que esse código está acoplado à implementação do <code>EnviadorDeEmail</code> mesmo? Se eu quiser trocar a implementação padrão por uma que não fica esperando o email ser enviado, por exemplo, vou ter que varrer o sistema inteiro pra fazer isso? Não. Só preciso fazer isso em algum lugar:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 EnviadorDeEmail = EnviadorDeEmailNaoBlocante
-</pre>
+{% endhighlight %}
+
 <p>Se eu tenho várias classes que oferecem serviços e são usadas como dependências no meu sistema, basta eu escolher um nome para o serviço, e dar new na hora que eu precisar usar (ou coisa parecida). E no meu ponto de entrada do sistema, simplesmente faço o 'bind' desses serviços para as implementações:</p>
-<pre lang="ruby">
+
+{% highlight ruby %}
 EnviadorDeEmail = EnviadorDeEmailNaoBlocante
 Cache = MemCache
 GeradorDeNotaFiscal = NotaFiscal::GeradorViaSoap
 #...
-</pre>
+{% endhighlight %}
+
 <p>Sem contar que conseguimos implementar o new pra retornar a mesma instância, já que ele é um simples método da classe. Os motivos que tínhamos para não dar new nas classes não valem aqui (pelo menos não a maioria deles). O problema é: qual é o perigo disso?</p>
